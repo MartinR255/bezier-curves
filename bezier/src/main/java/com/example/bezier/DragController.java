@@ -2,60 +2,51 @@ package com.example.bezier;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Circle;
 
 public class DragController {
     private final Point point;
-    private final Node target;
-    private double anchorX;
-    private double anchorY;
-    private double mouseOffsetFromNodeZeroX;
-    private double mouseOffsetFromNodeZeroY;
+    private final Node node;
+    private double anchorPointX;
+    private double anchorPointY;
+    private double cursorOffsetX;
+    private double cursorOffsetY;
+    private double offsetY;
 
     private BooleanProperty dragged;
 
-    public DragController(Point point, Node target) {
+    public DragController(Point point, Node node, double offsetY) {
         this.point = point;
-        this.target = target;
+        this.node = node;
+        this.offsetY = offsetY;
         dragged = new SimpleBooleanProperty();
         dragged.set(false);
         createHandlers();
     }
 
     private void createHandlers() {
-        target.setOnMousePressed(event -> {
-            if (event.isPrimaryButtonDown()) {
-                anchorX = event.getSceneX();
-                anchorY = event.getSceneY();
-                mouseOffsetFromNodeZeroX = event.getX();
-                mouseOffsetFromNodeZeroY = event.getY();
-            }
-            if (event.isSecondaryButtonDown()) {
-                target.setTranslateX(0);
-                target.setTranslateY(0);
-            }
+        node.setOnMousePressed(event -> {
+            anchorPointX = event.getSceneX();
+            anchorPointY = event.getSceneY();
+            cursorOffsetX = event.getX();
+            cursorOffsetY = event.getY();
             dragged.set(true);
         });
 
-        target.setOnMouseDragged(event -> {
-            target.setTranslateX(event.getSceneX() - anchorX);
-            target.setTranslateY(event.getSceneY() - anchorY);
+        node.setOnMouseDragged(event -> {
+            node.setTranslateX(event.getSceneX() - anchorPointX);
+            node.setTranslateY(event.getSceneY() - anchorPointY);
             point.setX(event.getSceneX());
             point.setY(event.getSceneY());
         });
 
-        target.setOnMouseReleased(event -> {
-            //commit changes to LayoutX and LayoutY
-            target.setLayoutX(event.getSceneX() - mouseOffsetFromNodeZeroX);
-            target.setLayoutY(event.getSceneY() - mouseOffsetFromNodeZeroY);
+        node.setOnMouseReleased(event -> {
+            node.setLayoutX(event.getSceneX() - cursorOffsetX);
+            node.setLayoutY(event.getSceneY() - cursorOffsetY - offsetY);
             point.setX(event.getSceneX());
-            point.setY(event.getSceneY());
-            //clear changes from TranslateX and TranslateY
-            target.setTranslateX(0);
-            target.setTranslateY(0);
+            point.setY(event.getSceneY() - offsetY);
+            node.setTranslateX(0);
+            node.setTranslateY(0);
             dragged.set(false);
         });
     }

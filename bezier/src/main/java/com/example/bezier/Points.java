@@ -29,4 +29,8 @@ public class Points {
     public List<List<Double>> getPointsCoordinates() {
         return points.stream().map(p -> p.getPoint()).toList();
     }
+
+    public void removePoint(int index) {
+        points.remove(index);
+    }
 }
