@@ -1,0 +1,21 @@
+.hbox .button {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-border-style: none;
+    -fx-background-color: "transparent";
+}
+
+.hbox .button:hover {
+    -fx-text-fill: #383838;
+}
+
+.hbox {
+    -fx-font-family: "Century Gothic";
+    -fx-padding: 4px;
+    -fx-border-color: #383838;
+    -fx-border-width: 0px 0px 2px 0px;
+    /*-fx-background-color: linear-gradient(to right, #ffa411 0%, rgb(247, 216, 14) 74%);*/
+    -fx-background-color: linear-gradient(to right, #8e9eab 0%, #d5d7d7 100%);
+
+}
